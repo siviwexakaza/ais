@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id                 String              @id @default(uuid())
+  firstName          String
+  lastName           String
+  idNumber           String              @unique @db.Char(13)
+  dateOfBirth        DateTime
+  phoneNumber        String
+  email              String              @unique
+  streetName         String
+  suburb             String
+  city               String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  customerVehicle    CustomerVehicle[]
+  walkins            Walkin[]
+  customerInsurances CustomerInsurance[]
+
+  @@index([email])
+  @@index([idNumber])
+  @@map("customers")
+}
+
+model Walkin {
+  id                  String             @id @default(uuid())
+  customerId          String
+  vehicleId           String
+  branchId            String
+  customerInsuranceId String?
+  claimNumber         String?
+  pictures            String?
+  notes               String?
+  clerkRef            String?
+  assessorName        String?
+  assessorNumber      String?
+  assessorCompany     String?
+  authorized          Boolean?
+  condition           String
+  customer            Customer           @relation(fields: [customerId], references: [id])
+  vehicle             CustomerVehicle    @relation(fields: [vehicleId], references: [id])
+  branch              Branch             @relation(fields: [branchId], references: [id])
+  customerInsurance   CustomerInsurance? @relation(fields: [customerInsuranceId], references: [id])
+  createdAt           DateTime           @default(now())
+  bookedAt            DateTime?
+  authorizationDate   DateTime?
+  updatedAt           DateTime           @updatedAt
+  status              String
+  timeQuotes          TimeQuote[]
+  moneyQuotes         MoneyQuote[]
+
+  @@map("walkins")
+}
+
+model TimeQuote {
+  id             String          @id @default(uuid())
+  walkinId       String
+  estimator      String
+  status         String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  subTotal       Float           @default(0)
+  walkin         Walkin          @relation(fields: [walkinId], references: [id])
+  timeQuoteItems TimeQuoteItem[]
+
+  @@map("time_quotes")
+}
+
+model MoneyQuote {
+  id              String           @id @default(uuid())
+  walkinId        String
+  status          String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  subTotal        Float            @default(0)
+  walkin          Walkin           @relation(fields: [walkinId], references: [id])
+  moneyQuoteItems MoneyQuoteItem[]
+
+  @@map("money_quotes")
+}
+
+model TimeQuoteItem {
+  id          String    @id @default(uuid())
+  timeQuoteId String
+  oper        String
+  description String
+  qty         Int
+  labour      Float?
+  paint       Float?
+  strip       Float?
+  outwork     Float?
+  markup      Float?
+  bett        Float?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  timeQuote   TimeQuote @relation(fields: [timeQuoteId], references: [id])
+
+  @@map("time_quote_items")
+}
+
+model MoneyQuoteItem {
+  id           String     @id @default(uuid())
+  moneyQuoteId String
+  oper         String
+  description  String
+  qty          Int
+  labour       Float?
+  paint        Float?
+  strip        Float?
+  outwork      Float?
+  markup       Float?
+  bett         Float?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  moneyQuote   MoneyQuote @relation(fields: [moneyQuoteId], references: [id])
+
+  @@map("money_quote_items")
+}
+
+model Branch {
+  id      String   @id @default(uuid())
+  name    String
+  address String
+  walkins Walkin[]
+
+  @@map("branches")
+}
+
+model Vehicle {
+  id              String            @id @default(uuid())
+  make            String
+  model           String
+  customerVehicle CustomerVehicle[]
+
+  @@map("vehicles")
+}
+
+model CustomerVehicle {
+  id                 String   @id @default(uuid())
+  registrationNumber String
+  vinNumber          String
+  engineNumber       String
+  odometer           Int
+  colour             String
+  year               Int
+  isUnderWarranty    Boolean  @default(false)
+  customerId         String
+  vehicleId          String
+  customer           Customer @relation(fields: [customerId], references: [id])
+  vehicle            Vehicle  @relation(fields: [vehicleId], references: [id])
+  walkins            Walkin[]
+
+  @@index([registrationNumber])
+  @@map("customer_vehicles")
+}
+
+model CustomerInsurance {
+  id              String   @id @default(uuid())
+  insuranceNumber String
+  customerId      String
+  insurerId       String
+  customer        Customer @relation(fields: [customerId], references: [id])
+  insurer         Insurer  @relation(fields: [insurerId], references: [id])
+  walkins         Walkin[]
+
+  @@map("customer_insurances")
+}
+
+model Insurer {
+  id                 String              @id @default(uuid())
+  name               String
+  phoneNumber        String
+  email              String              @unique
+  customerInsurances CustomerInsurance[]
+  rate               Float               @default(0)
+
+  @@index([name])
+  @@map("insurers")
+}
+
+model Assessor {
+  id          String @id @default(uuid())
+  name        String
+  email       String @unique
+  phoneNumber String
+
+  @@map("assessors")
+}
+
+model Role {
+  id   String @id @default(uuid())
+  name String
+
+  @@map("roles")
+}
+
+model Permission {
+  id   String @id @default(uuid())
+  name String
+
+  @@map("permissions")
+}
