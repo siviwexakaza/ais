@@ -1,16 +1,19 @@
+export const dynamic = "force-dynamic";
+
 import { getCustomerById } from "@/actions/customer/actions";
 import { notFound } from "next/navigation";
 import { CustomerDetails } from "../_components/customer-details";
 
-interface PageProps {
+interface CustomerPageProps {
   params: {
     id: string;
   };
 }
 
-export default async function CustomerDetailsPage({ params }: PageProps) {
-  const id = await params.id;
-  const customer = await getCustomerById(id);
+export default async function CustomerDetailsPage({
+  params,
+}: CustomerPageProps) {
+  const customer = await getCustomerById(params.id);
 
   if (!customer) {
     notFound();

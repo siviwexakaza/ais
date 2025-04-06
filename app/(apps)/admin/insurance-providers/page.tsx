@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getInsurers } from "@/actions/insurer/actions";
 import { ManageInsurerDialog } from "./_components/manage_insurer-dialog";
 import { InsurersTable } from "./_components/insurers-table";

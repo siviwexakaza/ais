@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { ManageVehicleDialog } from "./_components/manage-vehicle-dialog";
 import { VehiclesTable } from "./_components/vehicles-table";
 import { getVehicles } from "@/actions/vehicle/actions";

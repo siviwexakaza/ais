@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getCustomers } from "@/actions/customer/actions";
 import { CustomersTable } from "./_components/customers-table";
 import { ManageCustomerDialog } from "./_components/manage-customer-dialog";

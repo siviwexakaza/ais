@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getBranches } from "@/actions/branch/actions";
 import { BranchesTable } from "./_components/branches-table";
 import { ManageBranchesDialog } from "./_components/manage-branches-dialog";

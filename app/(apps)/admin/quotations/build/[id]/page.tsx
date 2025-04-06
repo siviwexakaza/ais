@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getWalkinById } from "@/actions/walkin/actions";
 import CustomerQuote from "./_components/CustomerQuote";
 import { notFound } from "next/navigation";
@@ -9,14 +11,12 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const id = await params.id;
-  const quotation = await getWalkinById(id);
+  const quotation = await getWalkinById(params.id);
 
   if (!quotation) {
     notFound();
   }
 
-  console.log("WALKI", quotation);
   return (
     <div className="flex flex-col gap-4">
       <div>

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { ManageAssessorDialog } from "./_components/manage-assessor-dialog";
 import { getAssessors } from "@/actions/assessor/actions";
 import { AssessorsTable } from "./_components/assessors-table";
