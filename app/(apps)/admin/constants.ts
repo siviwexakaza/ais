@@ -1,5 +1,7 @@
 import {
+  Building2,
   Car,
+  ChartPie,
   Cog,
   CogIcon,
   File,
@@ -16,63 +18,135 @@ import {
   User2Icon,
   Users,
   UserSearch,
+  Wallet,
+  Wrench,
 } from "lucide-react";
 
 export const ADMIN_SIDEBAR_ITEMS = [
   {
-    name: "Dashboard",
-    url: "/admin/dashboard",
-    icon: Home,
-  },
-  {
-    name: "Quotations",
+    name: "Analytics",
     url: "",
-    icon: FileClock,
+    icon: ChartPie,
     isActive: false,
     items: [
       {
-        name: "Create",
-        url: "/admin/quotations/create",
+        name: "Dashboard",
+        url: "/admin/dashboard",
       },
       {
-        name: "Estimators",
-        url: "/admin/quotations/estimators",
-      },
-      {
-        name: "List",
-        url: "/admin/quotations/list",
+        name: "Reports",
+        url: "/admin/reports",
       },
     ],
   },
   {
-    name: "Invoices",
-    url: "/admin/invoices",
-    icon: File,
+    name: "Finance",
+    url: "",
+    icon: Wallet,
+    isActive: false,
+    items: [
+      {
+        name: "Quotes",
+        url: "/admin/quotations/create",
+      },
+      {
+        name: "Invoices",
+        url: "/admin/invoices",
+        icon: File,
+      },
+      {
+        name: "Awaiting Payment",
+        url: "/admin/pending-payments",
+        icon: File,
+      },
+      {
+        name: "Statements",
+        url: "/admin/statements",
+        icon: File,
+      },
+    ],
   },
+
   {
-    name: "Employees",
-    url: "/admin/employees",
+    name: "Clients",
+    url: "",
     icon: Users,
+    isActive: false,
+    items: [
+      {
+        name: "Customers",
+        url: "/admin/customers",
+        icon: ShoppingCart,
+      },
+      {
+        name: "Awaiting Quotations",
+        url: "/admin/customers",
+        icon: ShoppingCart,
+      },
+    ],
   },
+
   {
-    name: "Customers",
-    url: "/admin/customers",
-    icon: ShoppingCart,
-  },
-  {
-    name: "Branches",
-    url: "/admin/branches",
-    icon: MapPin,
+    name: "Workshop",
+    url: "",
+    icon: Wrench,
+    isActive: false,
+    items: [
+      {
+        name: "Awaiting Auth",
+        url: "/admin/customers",
+        icon: ShoppingCart,
+      },
+      {
+        name: "In Progress",
+        url: "/admin/customers",
+        icon: ShoppingCart,
+      },
+      {
+        name: "Complete",
+        url: "/admin/customers",
+        icon: ShoppingCart,
+      },
+      {
+        name: "Projects",
+        url: "/admin/customers",
+        icon: ShoppingCart,
+      },
+      {
+        name: "Facilities",
+        url: "/admin/customers",
+        icon: ShoppingCart,
+      },
+      {
+        name: "Workshop Reports",
+        url: "/admin/customers",
+        icon: ShoppingCart,
+      },
+    ],
   },
   {
     name: "Inventory",
-    url: "/admin/inventory",
-    icon: ShoppingBasket,
-  },
-  {
-    name: "Roles & Permissions",
     url: "",
-    icon: Network,
+    icon: ShoppingCart,
+    isActive: false,
+    items: [
+      {
+        name: "Parts",
+        url: "/admin/inventory",
+        icon: ShoppingBasket,
+      },
+      {
+        name: "Paint",
+        url: "/admin/inventory",
+        icon: ShoppingBasket,
+      },
+    ],
+  },
+
+  {
+    name: "System Roles",
+    url: "",
+    icon: Building2,
     isActive: false,
     items: [
       {
@@ -83,26 +157,36 @@ export const ADMIN_SIDEBAR_ITEMS = [
         name: "Permissions",
         url: "/admin/permissions",
       },
+      {
+        name: "Employees",
+        url: "/admin/employees",
+        icon: Users,
+      },
+      {
+        name: "Branches",
+        url: "/admin/branches",
+        icon: MapPin,
+      },
+      {
+        name: "Suppliers",
+        url: "/admin/suppliers",
+        icon: UserSearch,
+      },
+      {
+        name: "Insurance Providers",
+        url: "/admin/insurance-providers",
+        icon: Store,
+      },
+      {
+        name: "Assessors",
+        url: "/admin/assessors",
+        icon: SearchCheck,
+      },
+      {
+        name: "Vehicles",
+        url: "/admin/vehicles",
+        icon: Car,
+      },
     ],
-  },
-  {
-    name: "Suppliers",
-    url: "/admin/suppliers",
-    icon: UserSearch,
-  },
-  {
-    name: "Insurance Providers",
-    url: "/admin/insurance-providers",
-    icon: Store,
-  },
-  {
-    name: "Assessors",
-    url: "/admin/assessors",
-    icon: SearchCheck,
-  },
-  {
-    name: "Vehicles",
-    url: "/admin/vehicles",
-    icon: Car,
   },
 ];
