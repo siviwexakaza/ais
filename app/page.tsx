@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   SignedIn,
@@ -6,71 +7,70 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/nextjs";
+import { Cloud, CloudIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <SignedOut>
-          <Button asChild>
-            <SignInButton mode="modal" />
+    <>
+      <SignedIn>
+        <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+          <UserButton />
+          <Button
+            onClick={() => {
+              router.push("/admin/dashboard");
+            }}
+          >
+            Go to Dashboard
           </Button>
-        </SignedOut>
+        </div>
+      </SignedIn>
+      <SignedOut>
+        <div className="min-h-screen flex">
+          {/* Left Side */}
+          <div className="w-1/2 bg-gradient-to-br from-blue-600 via-blue-100 to-pink-100 flex flex-col p-36">
+            <p className="text-4xl font-bold text-amber-50 max-w-md leading-tight">
+              AIS
+            </p>
+            <p className="text-4xl font-bold text-amber-50 max-w-md leading-tight my-4">
+              Your smart CRM for Seamless Operations & Better Customer
+              Engagement
+            </p>
+            <Image
+              src={"/dashboard.svg"}
+              width={350}
+              height={350}
+              alt="image"
+              className="mt-8"
+            />
+          </div>
 
-        <SignedIn>
-          <UserButton showName />
-          <Link href="/admin/dashboard">Go to Dashboard</Link>
-        </SignedIn>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          {/* Right Side */}
+          <div className="w-1/2 bg-white flex items-center justify-center p-12">
+            <div className="w-full max-w-md">
+              <div className="w-full flex gap-2 justify-center items-center ">
+                <CloudIcon color="#155dfc" size={40} />
+                <p className="text-3xl font-bold text-slate-900 max-w-md leading-tight my-4">
+                  AIS
+                </p>
+              </div>
+
+              <div className="w-full flex flex-col gap-2 items-center mb-4">
+                <p className="text-2xl font-bold text-slate-900 max-w-md leading-tight">
+                  Welcome Back
+                </p>
+                <p className="text-md  text-slate-500 max-w-md leading-tight">
+                  Please login to continue.
+                </p>
+              </div>
+              <SignIn />
+            </div>
+          </div>
+        </div>
+      </SignedOut>
+    </>
   );
 }
