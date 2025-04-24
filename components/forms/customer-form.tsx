@@ -25,9 +25,12 @@ import {
   PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { Calendar } from "../ui/calendar";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import Uploader from "./uploader";
+import { Checkbox } from "../ui/checkbox";
+import { toast } from "sonner";
 const formSchema = addCustomerSchema;
 
 interface CustomerFormProps {
@@ -46,12 +49,11 @@ export function CustomerForm({
       firstName: "",
       lastName: "",
       idNumber: "",
-      dateOfBirth: new Date(),
       phoneNumber: "",
       email: "",
-      city: "",
-      suburb: "",
-      streetName: "",
+      physicalAddress: "",
+      isWhatsappNumber: false,
+      driversLicencePic: "",
     },
   });
 
@@ -76,7 +78,20 @@ export function CustomerForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+        <Uploader
+          onUploadComplete={(res) => {
+            if (res.url) {
+              console.log("URL", res.url);
+              form.setValue("driversLicencePic", res.url);
+            } else if (res.error) {
+              toast.error(res.error);
+            }
+          }}
+          acceptFormats={{ "image/*": [] }}
+          text="Driver's licence"
+          icon={Camera}
+        />
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -104,125 +119,80 @@ export function CustomerForm({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="idNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>ID Number</FormLabel>
-                <FormControl>
-                  <Input placeholder="Customer ID number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Customer email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input placeholder="Customer phone number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>City</FormLabel>
-                <FormControl>
-                  <Input placeholder="Customer city" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="suburb"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Suburb</FormLabel>
-                <FormControl>
-                  <Input placeholder="Customer suburb" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="streetName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Street Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Customer street name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
         <FormField
           control={form.control}
-          name="dateOfBirth"
+          name="idNumber"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                    className="bg-white w-full shadow-md rounded-md"
-                  />
-                </PopoverContent>
-              </Popover>
+            <FormItem>
+              <FormLabel>ID Number / Passport</FormLabel>
+              <FormControl>
+                <Input placeholder="Customer ID number / passport" {...field} />
+              </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="phoneNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input placeholder="Customer phone number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Customer email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="physicalAddress"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>City</FormLabel>
+              <FormControl>
+                <Input placeholder="Physical Address" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="isWhatsappNumber"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>
+                  Use the above number for Whatsapp communication
+                </FormLabel>
+              </div>
             </FormItem>
           )}
         />
@@ -232,7 +202,11 @@ export function CustomerForm({
             <Spinner />
           </div>
         ) : (
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            disabled={!form.formState.isValid}
+            className="w-full"
+          >
             Submit
           </Button>
         )}

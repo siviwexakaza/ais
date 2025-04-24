@@ -3,6 +3,8 @@ export const dynamic = "force-dynamic";
 import { getCustomerById } from "@/actions/customer/actions";
 import { notFound } from "next/navigation";
 import { CustomerDetails } from "../_components/customer-details";
+import { Button } from "@/components/ui/button";
+import { Pencil } from "lucide-react";
 
 interface CustomerPageProps {
   params: {
@@ -21,9 +23,15 @@ export default async function CustomerDetailsPage({
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <h1 className="text-2xl font-bold">
-        {customer.firstName} {customer.lastName}
-      </h1>
+      <div className="flex gap-2">
+        <h1 className="text-2xl font-bold">
+          {customer.firstName} {customer.lastName}
+        </h1>
+        <Button variant={"ghost"}>
+          <Pencil />
+        </Button>
+      </div>
+
       <p className="text-sm text-gray-500">
         Manage {customer.firstName}'s information, vehicles, quotations and
         insurance details

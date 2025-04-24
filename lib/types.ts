@@ -33,11 +33,7 @@ export type Quotation = {
   status: string;
 };
 
-export type FullCustomerDetails = Customer & {
-  customerVehicle: (CustomerVehicle & { vehicle: Vehicle })[];
-  customerInsurances: (CustomerInsurance & { insurer: Insurer })[];
-  walkins: (Walkin & { branch: Branch })[];
-};
+export type FullCustomerDetails = Customer;
 
 export type QuoteDetails = Walkin & {
   branch: Branch;

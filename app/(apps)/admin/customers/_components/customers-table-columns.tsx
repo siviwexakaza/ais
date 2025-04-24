@@ -33,12 +33,8 @@ export const CustomersTableColumns: ColumnDef<ListCustomerType>[] = [
     header: "Email",
   },
   {
-    accessorKey: "city",
-    header: "City",
-  },
-  {
-    accessorKey: "suburb",
-    header: "Suburb",
+    accessorKey: "physicalAddress",
+    header: "Physical Address",
   },
   {
     accessorKey: "idNumber",

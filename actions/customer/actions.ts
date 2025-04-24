@@ -21,6 +21,7 @@ export async function createCustomer(
     revalidatePath(path);
     return customer;
   } catch (error) {
+    console.log("ERROR", error);
     throw new Error("Failed to create customer");
   }
 }
@@ -42,30 +43,11 @@ export async function searchCustomers(query: string): Promise<Customer[]> {
   });
 }
 
-export async function getCustomerById(
-  id: string
-): Promise<FullCustomerDetails | null> {
+export async function getCustomerById(id: string): Promise<Customer | null> {
   try {
     const customer = await prisma.customer.findUnique({
       where: {
         id,
-      },
-      include: {
-        customerVehicle: {
-          include: {
-            vehicle: true,
-          },
-        },
-        customerInsurances: {
-          include: {
-            insurer: true,
-          },
-        },
-        walkins: {
-          include: {
-            branch: true,
-          },
-        },
       },
     });
     return customer;
@@ -73,56 +55,4 @@ export async function getCustomerById(
     console.error("Error fetching customer:", error);
     return null;
   }
-}
-
-export async function addCustomerVehicle(
-  values: any,
-  path = "/admin/customers"
-) {
-  try {
-    const customerVehicle = await prisma.customerVehicle.create({
-      data: values,
-    });
-    revalidatePath(path);
-    return customerVehicle;
-  } catch (error) {
-    throw new Error("Failed to create customer vehicle");
-  }
-}
-
-export async function getCustomerVehicles(customerId: string) {
-  return prisma.customerVehicle.findMany({
-    where: {
-      customerId,
-    },
-    include: {
-      vehicle: true,
-    },
-  });
-}
-
-export async function addCustomerInsurer(
-  values: any,
-  path = "/admin/customers"
-) {
-  try {
-    const customerInsurer = await prisma.customerInsurance.create({
-      data: values,
-    });
-    revalidatePath(path);
-    return customerInsurer;
-  } catch (error) {
-    throw new Error("Failed to add customer insurance provider");
-  }
-}
-
-export async function getCustomerInsurances(customerId: string) {
-  return prisma.customerInsurance.findMany({
-    where: {
-      customerId,
-    },
-    include: {
-      insurer: true,
-    },
-  });
 }

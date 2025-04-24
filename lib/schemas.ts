@@ -55,22 +55,28 @@ export const addCustomerSchema = z.object({
   firstName: z
     .string()
     .min(2, { message: "First name must be at least 2 characters." }), // First name must be at least 2 characters
+  driversLicencePic: z
+    .string()
+    .min(2, { message: "Driver's licence is requred" }),
   lastName: z
     .string()
     .min(2, { message: "Last name must be at least 2 characters." }), // Last name must be at least 2 characters
   idNumber: z
     .string()
-    .length(13, { message: "ID number must be exactly 13 characters." }), // ID number should have 13 characters
-  dateOfBirth: z.date({
-    required_error: "A date of birth is required.",
-  }), // Date of birth should be a valid date string
+    .min(9, {
+      message: "ID or passport number must be between 9 and 13 characters.",
+    })
+    .max(13, {
+      message: "ID or passport number must be between 9 and 13 characters.",
+    }),
   phoneNumber: z
     .string()
     .min(10, { message: "Phone number must be at least 10 characters." }), // Phone number should be at least 10 characters
   email: z.string().email({ message: "Invalid email address." }), // Valid email format
-  streetName: z.string().min(1, { message: "Street name must not be empty." }), // Street name should not be empty
-  suburb: z.string().min(1, { message: "Suburb must not be empty." }), // Suburb should not be empty
-  city: z.string().min(1, { message: "City must not be empty." }), // City should not be empty
+  physicalAddress: z
+    .string()
+    .min(1, { message: "Physical address must not be empty." }),
+  isWhatsappNumber: z.boolean().default(false),
 });
 
 export const addCustomerVehicleSchema = z.object({
