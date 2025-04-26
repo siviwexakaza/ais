@@ -6,28 +6,25 @@ import {
   SignIn,
   SignInButton,
   UserButton,
+  useUser,
 } from "@clerk/nextjs";
 import { Cloud, CloudIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
+  const { isSignedIn } = useUser();
+
+  useEffect(() => {
+    if (isSignedIn) {
+      router.replace("/admin/dashboard");
+    }
+  }, [isSignedIn]);
   return (
     <>
-      <SignedIn>
-        <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-          <UserButton />
-          <Button
-            onClick={() => {
-              router.push("/admin/dashboard");
-            }}
-          >
-            Go to Dashboard
-          </Button>
-        </div>
-      </SignedIn>
       <SignedOut>
         <div className="min-h-screen flex">
           {/* Left Side */}

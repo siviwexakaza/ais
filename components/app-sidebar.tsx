@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ADMIN_SIDEBAR_ITEMS } from "@/app/(apps)/admin/constants";
 import { NavMain } from "./nav-main";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const data = {
   user: {
@@ -156,6 +156,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useUser();
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -168,7 +169,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div> */}
                 <UserButton />
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Siviwe Xakaza</span>
+                  <span className="truncate font-medium">
+                    {user?.firstName} {user?.lastName}
+                  </span>
                   <span className="truncate text-xs">Super Admin</span>
                 </div>
               </a>

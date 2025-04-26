@@ -82,7 +82,6 @@ export function CustomerForm({
         <Uploader
           onUploadComplete={(res) => {
             if (res.url) {
-              console.log("URL", res.url);
               form.setValue("driversLicencePic", res.url);
             } else if (res.error) {
               toast.error(res.error);

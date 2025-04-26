@@ -1,6 +1,7 @@
 import {
   Building2,
   Car,
+  CarFront,
   ChartPie,
   Cog,
   CogIcon,
@@ -147,7 +148,6 @@ export const ADMIN_SIDEBAR_ITEMS = [
       },
     ],
   },
-
   {
     name: "System Roles",
     url: "",
@@ -193,5 +193,11 @@ export const ADMIN_SIDEBAR_ITEMS = [
         icon: Car,
       },
     ],
+  },
+  {
+    name: "Vehicle Brands",
+    url: "/admin/brands",
+    icon: CarFront,
+    isActive: false,
   },
 ];

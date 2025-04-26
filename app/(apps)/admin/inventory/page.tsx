@@ -1,3 +1,9 @@
+import Spinner from "@/components/spinner";
+
 export default function Page() {
-  return <h1>Inventory</h1>;
+  return (
+    <div className="w-full flex justify-center">
+      <Spinner />
+    </div>
+  );
 }

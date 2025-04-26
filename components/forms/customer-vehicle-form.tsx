@@ -1,234 +1,159 @@
-// "use client";
+"use client";
 
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-// import { Button } from "@/components/ui/button";
-// import {
-//   Form,
-//   FormControl,
-//   FormDescription,
-//   FormField,
-//   FormItem,
-//   FormLabel,
-//   FormMessage,
-// } from "@/components/ui/form";
-// import { Input } from "@/components/ui/input";
-// import { addCustomerVehicleSchema } from "@/lib/schemas";
-// import { NetworkResponse, AddCustomerVehicleType } from "@/lib/types";
-// import { CustomerVehicle, Vehicle } from "@prisma/client";
-// import { useEffect, useState } from "react";
-// import { addCustomerVehicle } from "@/actions/customer/actions";
-// import Spinner from "../spinner";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@radix-ui/react-popover";
-// import { Calendar } from "../ui/calendar";
-// import { CalendarIcon } from "lucide-react";
-// import { cn } from "@/lib/utils";
-// import { format } from "date-fns";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { getVehicles } from "@/actions/vehicle/actions";
-// import { Switch } from "../ui/switch";
-// const formSchema = addCustomerVehicleSchema;
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { addCustomerVehicleSchema } from "@/lib/schemas";
+import { NetworkResponse, AddCustomerVehicleType } from "@/lib/types";
+import { CustomerVehicle, VehicleBrand } from "@prisma/client";
+import { useEffect, useState } from "react";
+import Spinner from "../spinner";
+import Select from "react-select";
+import { createCustomerVehicle } from "@/actions/customerVehicle/actions";
+import { useParams } from "next/navigation";
+import { getBrands } from "@/actions/brand/actions";
+const formSchema = addCustomerVehicleSchema;
 
-// interface CustomerFormProps {
-//   onSubmitFinish: (response: NetworkResponse<CustomerVehicle>) => void;
-//   customerId: string;
-//   defaultValues?: AddCustomerVehicleType;
-// }
+interface CustomerVehicleFormProps {
+  onSubmitFinish: (response: NetworkResponse<CustomerVehicle>) => void;
+  defaultValues?: AddCustomerVehicleType;
+}
 
-// export function CustomerVehicleForm({
-//   onSubmitFinish,
-//   defaultValues,
-//   customerId,
-// }: CustomerFormProps) {
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-//   const form = useForm<AddCustomerVehicleType>({
-//     resolver: zodResolver(formSchema),
-//     defaultValues: defaultValues || {
-//       customerId: customerId,
-//       vehicleId: "",
-//       registrationNumber: "",
-//       year: "",
-//       colour: "",
-//       engineNumber: "",
-//       vinNumber: "",
-//       odometer: "",
-//       isUnderWarranty: false,
-//     },
-//   });
+export function CustomerVehicleForm({
+  onSubmitFinish,
+  defaultValues,
+}: CustomerVehicleFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [brands, setBrands] = useState<{ value: string; label: string }[]>([]);
+  const params = useParams();
+  const form = useForm<AddCustomerVehicleType>({
+    resolver: zodResolver(formSchema),
+    defaultValues: defaultValues || {
+      model: "",
+      registrationNumber: "",
+      engineNumber: "",
+    },
+  });
 
-//   useEffect(() => {
-//     const fetchVehicles = async () => {
-//       const response = await getVehicles();
-//       setVehicles(response);
-//     };
-//     fetchVehicles();
-//   }, []);
+  const fetchAllBrands = async () => {
+    const res = await getBrands();
 
-//   async function onSubmit(values: AddCustomerVehicleType) {
-//     setIsLoading(true);
-//     const data = {
-//       ...values,
-//       year: parseInt(values.year),
-//       odometer: parseInt(values.odometer),
-//     };
-//     console.log(data);
-//     try {
-//       const response = await addCustomerVehicle(data);
-//       console.log(response);
-//       onSubmitFinish({
-//         success: true,
-//         data: response,
-//       });
-//     } catch (error) {
-//       console.error(error);
-//       onSubmitFinish({
-//         success: false,
-//         message: "Failed to proccess form. Please try again.",
-//       });
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   }
+    const options = res.map((item) => ({
+      value: item.id,
+      label: item.name,
+    }));
+    setBrands(options);
+  };
 
-//   return (
-//     <Form {...form}>
-//       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-//         <FormField
-//           control={form.control}
-//           name="vehicleId"
-//           render={({ field }) => (
-//             <FormItem>
-//               <FormLabel>Vehicle</FormLabel>
-//               <Select onValueChange={field.onChange} defaultValue={field.value}>
-//                 <FormControl className="w-full">
-//                   <SelectTrigger>
-//                     <SelectValue placeholder="Select a vehicle" />
-//                   </SelectTrigger>
-//                 </FormControl>
-//                 <SelectContent>
-//                   {vehicles.map((vehicle) => (
-//                     <SelectItem key={vehicle.id} value={vehicle.id}>
-//                       {vehicle.make} {vehicle.model}
-//                     </SelectItem>
-//                   ))}
-//                 </SelectContent>
-//               </Select>
-//               <FormMessage />
-//             </FormItem>
-//           )}
-//         />
-//         <div className="grid grid-cols-2 gap-4">
-//           <FormField
-//             control={form.control}
-//             name="registrationNumber"
-//             render={({ field }) => (
-//               <FormItem className="w-full">
-//                 <FormLabel>Registration Number</FormLabel>
-//                 <Input {...field} />
-//                 <FormMessage />
-//               </FormItem>
-//             )}
-//           />
-//           <FormField
-//             control={form.control}
-//             name="year"
-//             render={({ field }) => (
-//               <FormItem className="w-full">
-//                 <FormLabel>Year</FormLabel>
-//                 <Input type="number" maxLength={4} {...field} />
-//                 <FormMessage />
-//               </FormItem>
-//             )}
-//           />
-//           <FormField
-//             control={form.control}
-//             name="odometer"
-//             render={({ field }) => (
-//               <FormItem className="w-full">
-//                 <FormLabel>Odometer</FormLabel>
-//                 <Input type="number" {...field} />
-//                 <FormMessage />
-//               </FormItem>
-//             )}
-//           />
+  const handleBrandChange = (
+    selected: { value: string; label: string } | null
+  ) => {
+    if (selected) {
+      form.setValue("brandId", selected.value);
+    }
+  };
 
-//           <FormField
-//             control={form.control}
-//             name="colour"
-//             render={({ field }) => (
-//               <FormItem className="w-full">
-//                 <FormLabel>Colour</FormLabel>
-//                 <Input {...field} />
-//                 <FormMessage />
-//               </FormItem>
-//             )}
-//           />
-//           <FormField
-//             control={form.control}
-//             name="engineNumber"
-//             render={({ field }) => (
-//               <FormItem className="w-full">
-//                 <FormLabel>Engine Number</FormLabel>
-//                 <Input {...field} />
-//                 <FormMessage />
-//               </FormItem>
-//             )}
-//           />
-//           <FormField
-//             control={form.control}
-//             name="vinNumber"
-//             render={({ field }) => (
-//               <FormItem className="w-full">
-//                 <FormLabel>VIN Number</FormLabel>
-//                 <Input {...field} />
-//                 <FormMessage />
-//               </FormItem>
-//             )}
-//           />
-//         </div>
-//         <FormField
-//           control={form.control}
-//           name="isUnderWarranty"
-//           render={({ field }) => (
-//             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-//               <div className="space-y-0.5">
-//                 <FormLabel>Warranty</FormLabel>
-//                 <FormDescription>
-//                   Is this vehicle under warranty?
-//                 </FormDescription>
-//               </div>
-//               <FormControl>
-//                 <Switch
-//                   checked={field.value}
-//                   onCheckedChange={field.onChange}
-//                 />
-//               </FormControl>
-//             </FormItem>
-//           )}
-//         />
+  useEffect(() => {
+    if (params.id) {
+      form.setValue("customerId", params.id as string);
+    }
+    fetchAllBrands();
+  }, []);
 
-//         {isLoading ? (
-//           <div className="flex justify-center items-center w-full">
-//             <Spinner />
-//           </div>
-//         ) : (
-//           <Button type="submit" className="w-full">
-//             Submit
-//           </Button>
-//         )}
-//       </form>
-//     </Form>
-//   );
-// }
+  async function onSubmit(values: AddCustomerVehicleType) {
+    setIsLoading(true);
+    try {
+      const response = await createCustomerVehicle(values);
+      onSubmitFinish({
+        success: true,
+        data: response,
+      });
+    } catch (error) {
+      console.error(error);
+      onSubmitFinish({
+        success: false,
+        message: "Failed to proccess form. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+        <FormField
+          control={form.control}
+          name="engineNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Engine Number</FormLabel>
+              <FormControl>
+                <Input placeholder="Engine Number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Select
+          options={brands}
+          onChange={handleBrandChange}
+          placeholder="Select a brand..."
+        />
+
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="model"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Model</FormLabel>
+                <FormControl>
+                  <Input placeholder="Model" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="registrationNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Registration Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="Registration Number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {isLoading ? (
+          <div className="flex justify-center items-center w-full">
+            <Spinner />
+          </div>
+        ) : (
+          <Button
+            type="submit"
+            disabled={!form.formState.isValid}
+            className="w-full"
+          >
+            Submit
+          </Button>
+        )}
+      </form>
+    </Form>
+  );
+}

@@ -51,6 +51,33 @@ export const addVehicleSchema = z.object({
   }),
 });
 
+export const addBrandSchema = z.object({
+  name: z.string().min(2, {
+    message: "Brand name is required",
+  }),
+  logo: z.string().min(2, {
+    message: "Brand logo is required",
+  }),
+});
+
+export const addCustomerVehicleSchema = z.object({
+  model: z.string().min(1, {
+    message: "Vehicle model is required",
+  }),
+  registrationNumber: z.string().min(1, {
+    message: "Registration number is required",
+  }),
+  engineNumber: z.string().min(1, {
+    message: "Engine number is required",
+  }),
+  customerId: z.string().uuid({
+    message: "Valid customer ID is required",
+  }),
+  brandId: z.string().uuid({
+    message: "Valid brand ID is required",
+  }),
+});
+
 export const addCustomerSchema = z.object({
   firstName: z
     .string()
@@ -79,16 +106,33 @@ export const addCustomerSchema = z.object({
   isWhatsappNumber: z.boolean().default(false),
 });
 
-export const addCustomerVehicleSchema = z.object({
-  customerId: z.string().min(1, "Please select a customer"),
-  vehicleId: z.string().min(1, "Please select a vehicle"),
-  registrationNumber: z.string().min(1, "Please enter a registration number"),
-  year: z.string().min(4, "Please enter a year"),
-  colour: z.string().min(1, "Please enter a color"),
-  engineNumber: z.string().min(1, "Please enter an engine number"),
-  vinNumber: z.string().min(1, "Please enter a VIN number"),
-  odometer: z.string().min(0, "Please enter an odometer reading"),
-  isUnderWarranty: z.boolean().default(false),
+export const addIncidentSchema = z.object({
+  licenseDisk: z.string().min(1, { message: "License disk is required" }),
+  numberPlateFront: z
+    .string()
+    .min(1, { message: "Front plate photo is required" }),
+  frontView: z.string().min(1, { message: "Front view is required" }),
+  numberPlateRear: z
+    .string()
+    .min(1, { message: "Rear plate photo is required" }),
+  rearView: z.string().min(1, { message: "Rear view is required" }),
+  leftSide: z.string().min(1, { message: "Left side photo is required" }),
+  rightSide: z.string().min(1, { message: "Right side photo is required" }),
+  dashboard: z.string().min(1, { message: "Dashboard photo is required" }),
+  interiorSeating: z
+    .string()
+    .min(1, { message: "Interior seating photo is required" }),
+  bootSpace: z.string().min(1, { message: "Boot space photo is required" }),
+  rearBumber: z.string().min(1, { message: "Rear bumper photo is required" }),
+  engineBay: z.string().min(1, { message: "Engine bay photo is required" }),
+  damageArea: z.string().min(1, { message: "Damage area photo is required" }),
+  closeUpOfDamage: z
+    .string()
+    .min(1, { message: "Close-up of damage is required" }),
+  notes: z.string(),
+
+  customerId: z.string().uuid({ message: "Valid customer ID is required" }),
+  vehicleId: z.string().uuid({ message: "Valid vehicle ID is required" }),
 });
 
 export const QuotationSetupSchema = z.object({

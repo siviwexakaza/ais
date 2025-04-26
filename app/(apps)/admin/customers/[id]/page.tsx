@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { CustomerDetails } from "../_components/customer-details";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
+import { getCustomerVehicles } from "@/actions/customerVehicle/actions";
+import { getCustomerIncidents } from "@/actions/incident/actions";
 
 interface CustomerPageProps {
   params: {
@@ -20,6 +22,9 @@ export default async function CustomerDetailsPage({
   if (!customer) {
     notFound();
   }
+
+  const vehicles = await getCustomerVehicles(customer.id);
+  const incidents = await getCustomerIncidents(customer.id);
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -37,7 +42,11 @@ export default async function CustomerDetailsPage({
         insurance details
       </p>
 
-      <CustomerDetails customer={customer} />
+      <CustomerDetails
+        incidents={incidents}
+        customer={customer}
+        vehicles={vehicles}
+      />
     </div>
   );
 }

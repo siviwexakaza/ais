@@ -1,11 +1,9 @@
 import {
   Branch,
   Customer,
-  CustomerInsurance,
   CustomerVehicle,
-  Insurer,
-  Vehicle,
-  Walkin,
+  Incident,
+  VehicleBrand,
 } from "@prisma/client";
 import {
   addAssessorSchema,
@@ -15,6 +13,8 @@ import {
   addCustomerVehicleSchema,
   addBranchSchema,
   addCustomerInsuranceSchema,
+  addBrandSchema,
+  addIncidentSchema,
 } from "./schemas";
 import { z } from "zod";
 
@@ -35,11 +35,12 @@ export type Quotation = {
 
 export type FullCustomerDetails = Customer;
 
-export type QuoteDetails = Walkin & {
-  branch: Branch;
-  customer: Customer;
-  vehicle: CustomerVehicle & { vehicle: Vehicle };
-  customerInsurance: (CustomerInsurance & { insurer: Insurer }) | undefined;
+export type CustomerVehicleDetails = CustomerVehicle & {
+  brand: VehicleBrand;
+};
+
+export type IncidentDetails = Incident & {
+  vehicle: CustomerVehicle;
 };
 
 export type AddAssessorType = z.infer<typeof addAssessorSchema>;
@@ -54,8 +55,14 @@ export type ListVehicleType = { id: string } & AddVehicleType;
 export type AddCustomerType = z.infer<typeof addCustomerSchema>;
 export type ListCustomerType = { id: string } & AddCustomerType;
 
+export type AddBrandType = z.infer<typeof addBrandSchema>;
+export type ListBrandType = { id: string } & AddBrandType;
+
 export type AddCustomerVehicleType = z.infer<typeof addCustomerVehicleSchema>;
 export type ListCustomerVehicleType = { id: string } & AddCustomerVehicleType;
+
+export type AddIncidentType = z.infer<typeof addIncidentSchema>;
+export type ListIncidentType = { id: string } & AddIncidentType;
 
 export type AddBranchType = z.infer<typeof addBranchSchema>;
 export type ListBranchType = { id: string } & AddBranchType;
