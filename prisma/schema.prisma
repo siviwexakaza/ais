@@ -31,6 +31,7 @@ model Branch {
   id      String @id @default(uuid())
   name    String
   address String
+  parts   Part[]
 
   @@map("branches")
 }
@@ -40,8 +41,25 @@ model VehicleBrand {
   name             String
   logo             String
   customerVehicles CustomerVehicle[]
+  parts            Part[]
 
   @@map("vehicle_brands")
+}
+
+model Part {
+  id        String       @id @default(uuid())
+  model     String
+  make      String
+  quantity  Int
+  name      String
+  brandId   String
+  branchId  String
+  price     Float
+  picture   String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  brand     VehicleBrand @relation(fields: [brandId], references: [id])
+  branch    Branch       @relation(fields: [branchId], references: [id])
 }
 
 model CustomerVehicle {

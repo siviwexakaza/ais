@@ -3,6 +3,7 @@ import {
   Customer,
   CustomerVehicle,
   Incident,
+  Part,
   VehicleBrand,
 } from "@prisma/client";
 import {
@@ -15,6 +16,7 @@ import {
   addCustomerInsuranceSchema,
   addBrandSchema,
   addIncidentSchema,
+  addPartSchema,
 } from "./schemas";
 import { z } from "zod";
 
@@ -39,9 +41,17 @@ export type CustomerVehicleDetails = CustomerVehicle & {
   brand: VehicleBrand;
 };
 
+export type PartDetails = Part & {
+  brand: VehicleBrand;
+  branch: Branch;
+};
+
 export type IncidentDetails = Incident & {
   vehicle: CustomerVehicle;
 };
+
+export type AddPartType = z.infer<typeof addPartSchema>;
+export type ListPartsType = { id: string } & AddPartType;
 
 export type AddAssessorType = z.infer<typeof addAssessorSchema>;
 export type ListAssessorType = { id: string } & AddAssessorType;
