@@ -12,7 +12,7 @@ interface PartsTableProps {
 export function PartsTable({ parts }: PartsTableProps) {
   const router = useRouter();
   function onRowClick(row: PartDetails) {
-    //router.push(`/admin/brands/${row.id}`);
+    router.push(`/admin/inventory/${row.id}`);
   }
   return (
     <DataTable

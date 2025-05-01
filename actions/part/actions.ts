@@ -34,3 +34,16 @@ export async function getParts() {
     },
   });
 }
+
+export async function getPart(id: string) {
+  return prisma.part.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      branch: true,
+      brand: true,
+      partCategory: true,
+    },
+  });
+}
