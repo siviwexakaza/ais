@@ -44,6 +44,7 @@ export function BranchForm({ onSubmitFinish, defaultValues }: BranchFormProps) {
         success: true,
         data: response,
       });
+      form.reset();
     } catch (error) {
       console.error(error);
       onSubmitFinish({

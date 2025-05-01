@@ -33,6 +33,7 @@ import { createPart } from "@/actions/part/actions";
 import { getBrands } from "@/actions/brand/actions";
 import { getBranches } from "@/actions/branch/actions";
 import Select from "react-select";
+import { getCategories } from "@/actions/category/actions";
 const formSchema = addPartSchema;
 
 interface PartFormProps {
@@ -46,6 +47,9 @@ export function PartForm({ onSubmitFinish, defaultValues }: PartFormProps) {
   const [branches, setBranches] = useState<{ value: string; label: string }[]>(
     []
   );
+  const [categories, setCategories] = useState<
+    { value: string; label: string }[]
+  >([]);
   const form = useForm<AddPartType>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues || {
@@ -57,6 +61,8 @@ export function PartForm({ onSubmitFinish, defaultValues }: PartFormProps) {
       price: "",
       branchId: "",
       brandId: "",
+      partCategoryId: "",
+      condition: "",
     },
   });
 
@@ -68,6 +74,16 @@ export function PartForm({ onSubmitFinish, defaultValues }: PartFormProps) {
       label: item.name,
     }));
     setBrands(options);
+  };
+
+  const fetchAllCategories = async () => {
+    const res = await getCategories();
+
+    const options = res.map((item) => ({
+      value: item.id,
+      label: item.name,
+    }));
+    setCategories(options);
   };
 
   const fetchAllBranches = async () => {
@@ -86,8 +102,14 @@ export function PartForm({ onSubmitFinish, defaultValues }: PartFormProps) {
     if (selected) {
       form.setValue("brandId", selected.value);
     }
-    console.log(form.formState.errors);
-    console.log(form.formState.isValid);
+  };
+
+  const handleCategoryChange = (
+    selected: { value: string; label: string } | null
+  ) => {
+    if (selected) {
+      form.setValue("partCategoryId", selected.value);
+    }
   };
 
   const handleBranchChange = (
@@ -101,6 +123,7 @@ export function PartForm({ onSubmitFinish, defaultValues }: PartFormProps) {
   useEffect(() => {
     fetchAllBrands();
     fetchAllBranches();
+    fetchAllCategories();
   }, []);
 
   async function onSubmit(values: AddPartType) {
@@ -111,6 +134,7 @@ export function PartForm({ onSubmitFinish, defaultValues }: PartFormProps) {
         success: true,
         data: response,
       });
+      form.reset();
     } catch (error) {
       console.error(error);
       onSubmitFinish({
@@ -147,14 +171,37 @@ export function PartForm({ onSubmitFinish, defaultValues }: PartFormProps) {
           onChange={handleBranchChange}
           placeholder="Select a branch..."
         />
+        <Select
+          options={categories}
+          onChange={handleCategoryChange}
+          placeholder="Select a category..."
+        />
+        <Select
+          options={[
+            {
+              value: "New",
+              label: "New",
+            },
+            {
+              value: "Used",
+              label: "Used",
+            },
+          ]}
+          onChange={(selected: { value: string; label: string } | null) => {
+            if (selected) {
+              form.setValue("condition", selected.value);
+            }
+          }}
+          placeholder="Condition"
+        />
         <FormField
           control={form.control}
           name="make"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Year and Make</FormLabel>
+              <FormLabel>Make</FormLabel>
               <FormControl>
-                <Input placeholder="Year and Make" {...field} />
+                <Input placeholder="Make" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

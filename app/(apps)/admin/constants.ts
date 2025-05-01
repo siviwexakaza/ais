@@ -80,11 +80,6 @@ export const ADMIN_SIDEBAR_ITEMS = [
         icon: ShoppingCart,
       },
       {
-        name: "Add Photos",
-        url: "/admin/customers",
-        icon: ShoppingCart,
-      },
-      {
         name: "Awaiting Quotations",
         url: "/admin/customers",
         icon: ShoppingCart,

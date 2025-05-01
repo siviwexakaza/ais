@@ -13,39 +13,40 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { addBrandSchema } from "@/lib/schemas";
-import { NetworkResponse, AddCustomerType, AddBrandType } from "@/lib/types";
-import { VehicleBrand } from "@prisma/client";
+import { addPartCategorySchema } from "@/lib/schemas";
+import { NetworkResponse, AddPartCategoryType } from "@/lib/types";
+import { PartCategory } from "@prisma/client";
 import { useState } from "react";
-import { createCustomer } from "@/actions/customer/actions";
 import Spinner from "../spinner";
+import { Camera } from "lucide-react";
 
 import Uploader from "./uploader";
-import { Checkbox } from "../ui/checkbox";
 import { toast } from "sonner";
-import { createBrand } from "@/actions/brand/actions";
-import { Camera } from "lucide-react";
-const formSchema = addBrandSchema;
+import { createCategory } from "@/actions/category/actions";
+const formSchema = addPartCategorySchema;
 
-interface BrandFormProps {
-  onSubmitFinish: (response: NetworkResponse<VehicleBrand>) => void;
-  defaultValues?: AddBrandType;
+interface PartCategoryFormProps {
+  onSubmitFinish: (response: NetworkResponse<PartCategory>) => void;
+  defaultValues?: AddPartCategoryType;
 }
 
-export function BrandForm({ onSubmitFinish, defaultValues }: BrandFormProps) {
+export function PartCategoryForm({
+  onSubmitFinish,
+  defaultValues,
+}: PartCategoryFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<AddBrandType>({
+  const form = useForm<AddPartCategoryType>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues || {
       name: "",
-      logo: "",
+      image: "",
     },
   });
 
-  async function onSubmit(values: AddBrandType) {
+  async function onSubmit(values: AddPartCategoryType) {
     setIsLoading(true);
     try {
-      const response = await createBrand(values);
+      const response = await createCategory(values);
       onSubmitFinish({
         success: true,
         data: response,
@@ -68,23 +69,24 @@ export function BrandForm({ onSubmitFinish, defaultValues }: BrandFormProps) {
         <Uploader
           onUploadComplete={(res) => {
             if (res.url) {
-              form.setValue("logo", res.url);
+              form.setValue("image", res.url);
             } else if (res.error) {
               toast.error(res.error);
             }
           }}
           acceptFormats={{ "image/*": [] }}
-          text="Brand Logo"
+          text="Category image"
           icon={Camera}
         />
+
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Brand Name</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Brand name" {...field} />
+                <Input placeholder="Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

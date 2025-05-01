@@ -46,20 +46,33 @@ model VehicleBrand {
   @@map("vehicle_brands")
 }
 
+model PartCategory {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  parts     Part[]
+}
+
 model Part {
-  id        String       @id @default(uuid())
-  model     String
-  make      String
-  quantity  Int
-  name      String
-  brandId   String
-  branchId  String
-  price     Float
-  picture   String
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  brand     VehicleBrand @relation(fields: [brandId], references: [id])
-  branch    Branch       @relation(fields: [branchId], references: [id])
+  id             String       @id @default(uuid())
+  model          String
+  make           String
+  partNumber     Int          @unique @default(autoincrement())
+  quantity       Int
+  name           String
+  condition      String
+  brandId        String
+  branchId       String
+  partCategoryId String
+  price          Float
+  picture        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  partCategory   PartCategory @relation(fields: [partCategoryId], references: [id])
+  brand          VehicleBrand @relation(fields: [brandId], references: [id])
+  branch         Branch       @relation(fields: [branchId], references: [id])
 }
 
 model CustomerVehicle {

@@ -65,6 +65,7 @@ export function CustomerForm({
         success: true,
         data: response,
       });
+      form.reset();
     } catch (error) {
       console.error(error);
       onSubmitFinish({

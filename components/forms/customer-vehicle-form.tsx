@@ -78,6 +78,7 @@ export function CustomerVehicleForm({
         success: true,
         data: response,
       });
+      form.reset();
     } catch (error) {
       console.error(error);
       onSubmitFinish({

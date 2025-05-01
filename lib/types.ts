@@ -17,6 +17,7 @@ import {
   addBrandSchema,
   addIncidentSchema,
   addPartSchema,
+  addPartCategorySchema,
 } from "./schemas";
 import { z } from "zod";
 
@@ -59,6 +60,9 @@ export type IncidentExtendedDetails = Incident & {
 
 export type AddPartType = z.infer<typeof addPartSchema>;
 export type ListPartsType = { id: string } & AddPartType;
+
+export type AddPartCategoryType = z.infer<typeof addPartCategorySchema>;
+export type ListPartCategoryType = { id: string } & AddPartCategoryType;
 
 export type AddAssessorType = z.infer<typeof addAssessorSchema>;
 export type ListAssessorType = { id: string } & AddAssessorType;

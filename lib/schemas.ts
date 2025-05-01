@@ -78,12 +78,24 @@ export const addCustomerVehicleSchema = z.object({
   }),
 });
 
+export const addPartCategorySchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  image: z.string().min(1, {
+    message: "Image is required",
+  }),
+});
+
 export const addPartSchema = z.object({
   model: z.string().min(1, {
     message: "Model is required",
   }),
   picture: z.string().min(1, {
     message: "Picture is required",
+  }),
+  condition: z.string().min(1, {
+    message: "Condition is required",
   }),
   make: z.string().min(1, {
     message: "Make is required",
@@ -99,6 +111,9 @@ export const addPartSchema = z.object({
   }),
   branchId: z.string().uuid({
     message: "Valid branch ID is required",
+  }),
+  partCategoryId: z.string().uuid({
+    message: "Category is required",
   }),
   price: z.string().min(1, {
     message: "Price must be a positive number",
