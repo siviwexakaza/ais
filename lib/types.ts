@@ -50,6 +50,13 @@ export type IncidentDetails = Incident & {
   vehicle: CustomerVehicle;
 };
 
+export type IncidentExtendedDetails = Incident & {
+  vehicle: CustomerVehicle & {
+    brand: VehicleBrand;
+  };
+  customer: Customer;
+};
+
 export type AddPartType = z.infer<typeof addPartSchema>;
 export type ListPartsType = { id: string } & AddPartType;
 

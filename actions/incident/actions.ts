@@ -32,3 +32,19 @@ export async function getCustomerIncidents(customerId: string) {
     },
   });
 }
+
+export async function getIncident(id: string) {
+  return prisma.incident.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      customer: true,
+      vehicle: {
+        include: {
+          brand: true,
+        },
+      },
+    },
+  });
+}

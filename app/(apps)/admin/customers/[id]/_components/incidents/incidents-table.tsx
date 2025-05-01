@@ -12,7 +12,7 @@ interface IncidentTableProps {
 export function IncidentsTable({ incidents }: IncidentTableProps) {
   const router = useRouter();
   function onRowClick(row: IncidentDetails) {
-    //router.push(`/admin/customers/${row.id}`);
+    router.push(`/admin/incident/${row.id}`);
   }
   return (
     <DataTable
