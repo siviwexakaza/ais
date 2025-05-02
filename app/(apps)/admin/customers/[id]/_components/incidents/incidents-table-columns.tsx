@@ -30,8 +30,4 @@ export const IncidentTableColumns: ColumnDef<IncidentDetails>[] = [
     accessorKey: "createdAt",
     header: "Created At",
   },
-  {
-    accessorKey: "notes",
-    header: "Notes",
-  },
 ];

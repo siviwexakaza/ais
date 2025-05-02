@@ -118,12 +118,12 @@ function IncidentDetails(props: Props) {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Insurance Information</CardTitle>
+            <CardTitle>Incident Notes</CardTitle>
           </CardHeader>
 
           <CardContent>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-4">
-              <h1>Developemnt in progress</h1>
+              <p className="text-gray-900">{props.notes}</p>
             </div>
           </CardContent>
         </Card>
