@@ -44,7 +44,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
           <TabsList>
             <TabsTrigger value="incident">Incident</TabsTrigger>
             {/* <TabsTrigger value="vehicle">Vehicle</TabsTrigger> */}
-            {/* <TabsTrigger value="client">Client</TabsTrigger> */}
+            <TabsTrigger value="client">Client Documents</TabsTrigger>
             <TabsTrigger value="finance">Finance</TabsTrigger>
             <TabsTrigger value="workshop">Workshop</TabsTrigger>
             <TabsTrigger value="insurance">Insurance</TabsTrigger>
