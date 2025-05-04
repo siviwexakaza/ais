@@ -24,10 +24,13 @@ export async function POST(req: Request) {
     // Upload to Cloudinary
     const uploadResponse = await new Promise((resolve, reject) => {
       cloudinary.v2.uploader
-        .upload_stream({ folder, resource_type: "auto" }, (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        })
+        .upload_stream(
+          { folder, resource_type: "auto", type: "upload" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        )
         .end(buffer);
     });
 

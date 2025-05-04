@@ -87,6 +87,18 @@ export const addPartCategorySchema = z.object({
   }),
 });
 
+export const addDocumentSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  url: z.string().min(1, {
+    message: "Image is required",
+  }),
+  customerId: z.string().min(1, {
+    message: "Customer Id required",
+  }),
+});
+
 export const addPartSchema = z.object({
   model: z.string().min(1, {
     message: "Model is required",

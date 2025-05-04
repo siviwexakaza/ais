@@ -16,6 +16,8 @@ export function PartsTable({ parts }: PartsTableProps) {
   }
   return (
     <DataTable
+      searchFeild="name"
+      searchPlaceholder="Search parts by name..."
       columns={PartTableColumns}
       data={parts}
       onRowClick={onRowClick}

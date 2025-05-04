@@ -8,19 +8,20 @@ datasource db {
 }
 
 model Customer {
-  id                String            @id @default(uuid())
+  id                String             @id @default(uuid())
   firstName         String
   lastName          String
-  idNumber          String            @unique
+  idNumber          String             @unique
   phoneNumber       String
-  email             String            @unique
+  email             String             @unique
   physicalAddress   String
   driversLicencePic String
-  isWhatsappNumber  Boolean           @default(false)
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  isWhatsappNumber  Boolean            @default(false)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   customerVehicles  CustomerVehicle[]
   incidents         Incident[]
+  customerDocuments CustomerDocument[]
 
   @@index([email])
   @@index([idNumber])
@@ -53,6 +54,14 @@ model PartCategory {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   parts     Part[]
+}
+
+model CustomerDocument {
+  id         String   @id @default(uuid())
+  name       String   @unique
+  url        String
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
 }
 
 model Part {

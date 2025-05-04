@@ -14,6 +14,8 @@ import FinanceDetails from "./_components/FinanceDetails";
 import WorkshopDetails from "./_components/WorkshopDetails";
 import InsuranceDetails from "./_components/InsuranceDetails";
 import PrintButton from "./_components/PrintButton";
+import { getCustomerDocuments } from "@/actions/documents/actions";
+import { ManageDocumentsDialog } from "./_components/manage-documents-dialog";
 
 interface IncidentPageProps {
   params: {
@@ -23,10 +25,11 @@ interface IncidentPageProps {
 
 export default async function IncidentPage({ params }: IncidentPageProps) {
   const incident = await getIncident(params.id);
-  console.log(incident);
   if (!incident) {
     notFound();
   }
+
+  const documents = await getCustomerDocuments(incident.customerId);
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -56,7 +59,8 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
             <VehicleDetails />
           </TabsContent>
           <TabsContent value="client">
-            <ClientDetails />
+            <ManageDocumentsDialog customerId={incident.customerId} />
+            <ClientDetails documents={documents} />
           </TabsContent>
           <TabsContent value="finance">
             <FinanceDetails />

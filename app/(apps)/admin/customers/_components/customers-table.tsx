@@ -17,6 +17,8 @@ export function CustomersTable({ customers }: CustomersTableProps) {
   return (
     <DataTable
       columns={CustomersTableColumns}
+      searchFeild={"firstName"}
+      searchPlaceholder="Search by name..."
       data={customers}
       onRowClick={onRowClick}
     />

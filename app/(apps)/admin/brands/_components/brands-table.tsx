@@ -16,6 +16,8 @@ export function BrandsTable({ brands }: BrandsTableProps) {
   }
   return (
     <DataTable
+      searchFeild="name"
+      searchPlaceholder="Search by brand name..."
       columns={BrandsTableColumns}
       data={brands}
       onRowClick={onRowClick}
